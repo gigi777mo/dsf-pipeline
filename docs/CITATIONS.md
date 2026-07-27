@@ -1,64 +1,84 @@
 # Citations — DSF / Protein Thermal Shift Pipeline
 
-Cite the methods appropriate to your use. Core references for **Tm calculation** and the assay:
+Cite the methods appropriate to your use. Core references for the **assay** and **Tm calculations** implemented here:
 
-## Assay principle & ThermoFluor / DSF
+---
 
-- **Pantoliano et al. (ThermoFluor)**  
+## Assay principle (ThermoFluor / DSF)
+
+- **Pantoliano et al. (foundational thermal shift / ThermoFluor screening)**  
   Pantoliano MW, Petrella EC, Kwasnoski JD, et al.  
   *High-density miniaturized thermal shift assays as a general strategy for drug discovery.*  
   Journal of Biomolecular Screening. 2001;6(6):429–440.  
-  https://doi.org/10.1177/108705710100600609  
-  Foundational high-throughput thermal shift (dye-based) screening paper.
+  https://doi.org/10.1177/108705710100600609
 
-- **Niesen et al. (widely cited DSF protocol)**  
+- **Niesen et al. (most-cited practical DSF protocol)**  
   Niesen FH, Berglund H, Vedadi M.  
   *The use of differential scanning fluorimetry to detect ligand interactions that promote protein stability.*  
   Nature Protocols. 2007;2:2212–2221.  
-  https://doi.org/10.1038/nprot.2007.321  
-  Most-cited practical protocol for DSF / thermal shift ligand screening.
+  https://doi.org/10.1038/nprot.2007.321
 
-- **Ericsson et al.**  
+- **Ericsson et al. (stability optimization for structural biology)**  
   Ericsson UB, Hallberg BM, Detitta GT, Dekker N, Nordlund P.  
   *Thermofluor-based high-throughput stability optimization of proteins for structural studies.*  
-  Analytical Biochemistry. 2006;357(2):289–298.
+  Analytical Biochemistry. 2006;357(2):289–298.  
+  https://doi.org/10.1016/j.ab.2006.07.027
 
-## Tm calculation methods (used in this pipeline)
+---
 
-### First-derivative Tm
+## Tm calculation methods used in this pipeline
 
-The melting temperature is taken as the temperature at the **maximum of the first derivative** of fluorescence with respect to temperature (peak of dF/dT), i.e. the inflection of the melt curve. This is the **Derivative Tm** in Thermo Fisher Protein Thermal Shift Software and is the standard approach for single- and multi-transition curves in the DSF field.
+### First-derivative Tm (Tm_D)
 
-- Documented in Thermo Fisher Protein Thermal Shift Software / User Guides (Tm-Derivative).
-- Used throughout Niesen et al. and subsequent DSF protocols for reporting Tm from melt profiles.
+The melting temperature is the temperature at the **maximum of the first derivative** of fluorescence with respect to temperature (peak of dF/dT), i.e. the inflection of the melt curve.
 
-### Boltzmann (two-state sigmoidal) Tm
+$$
+T_{m,D} = \arg\max_T \left(\frac{dF}{dT}\right)
+$$
+
+This matches the **Derivative Tm** definition in Thermo Fisher Protein Thermal Shift Software and is the standard approach for single- and multi-transition DSF curves in the literature (including workflows based on Niesen et al.).
+
+### Boltzmann (two-state) Tm (Tm_B)
 
 Fluorescence in the transition region is fit to a two-state Boltzmann-type model:
 
-$$F(T) = F_{min} + \frac{F_{max} - F_{min}}{1 + \exp((T_m - T)/a)}$$
+$$
+F(T) = F_{\min} + \frac{F_{\max} - F_{\min}}{1 + \exp((T_m - T)/a)}
+$$
 
-where $T_m$ is the midpoint of the unfolding transition. This is the **Boltzmann Tm** in Thermo Protein Thermal Shift Software and the most common sigmoidal fit in published DSF analysis.
+where $T_m$ is the midpoint of the unfolding transition and $a$ is a steepness parameter. This matches the **Boltzmann Tm** in Thermo Protein Thermal Shift Software and is the sigmoidal form most widely used in published DSF analysis tools and papers.
 
-- Thermo Fisher Protein Thermal Shift Software (Boltzmann fit / ROA).
-- Same functional form widely used in DSF analysis tools and papers (e.g. SimpleDSFviewer; isothermal/DSF fitting literature).
+**Practice (Thermo + field):** for single transitions, derivative and Boltzmann Tm are usually similar but not identical. Use **one method consistently** for all samples in a study. For **multiple melt phases**, use derivative Tm.
 
-**Practice (Thermo + field):** for single transitions, derivative and Boltzmann Tm are usually similar but not identical; use **one method consistently** for all comparisons. For **multiple melt phases**, use derivative Tm (and/or multi-peak detection).
+### ΔTm
+
+$$
+\Delta T_m = T_m(\mathrm{sample}) - T_m(\mathrm{reference})
+$$
+
+As used throughout thermal-shift screening (Pantoliano et al.; Niesen et al.; Thermo PTS studies).
+
+---
 
 ## Thermo Scientific Protein Thermal Shift
 
-- Thermo Fisher Scientific. *Protein Thermal Shift Software* and *Protein Thermal Shift Studies User Guide*.  
-  Assay chemistry (Protein Thermal Shift dye), instrument compatibility (QuantStudio, StepOne, 7500, ViiA 7, etc.), and official definitions of Boltzmann Tm vs Derivative Tm.
+- Thermo Fisher Scientific. *Protein Thermal Shift Software* and *Protein Thermal Shift Studies User Guide* (e.g. MAN0025600 and related manuals).  
+  Official descriptions of Boltzmann Tm, Derivative Tm, regions of analysis (ROA), multi-Tm mode, and ΔTm vs reference.  
+  Product overview: https://www.thermofisher.com/us/en/home/life-science/pcr/real-time-pcr/real-time-pcr-applications/real-time-pcr-protein-analysis/protein-thermal-shift.html
 
-## Reviews & practical guides
+---
 
-- Bai N, et al. / fluorescence-based stability monitoring reviews (DSF vs nanoDSF, ICD).
-- STAR Protocols and similar guides on performing and optimizing DSF (raw RFU export, controls, Tm extraction).
+## Analysis software & methods notes (secondary)
+
+- SimpleDSFviewer and related tools describe first-derivative and half-maximal approaches for Tm extraction from DSF curves.
+- Community and core-facility guides (e.g. Harvard CMI QuantStudio DSF guides) reiterate: Thermo PTS software uses derivative and Boltzmann models; use a consistent method when comparing samples.
+
+---
 
 ## Suggested acknowledgment
 
-> Differential scanning fluorimetry (thermal shift) data were analyzed using first-derivative and/or Boltzmann two-state Tm estimation as implemented in standard Protein Thermal Shift workflows (Thermo Fisher) and consistent with established DSF protocols (Niesen et al., Nat Protoc 2007; Pantoliano et al., J Biomol Screen 2001). Melting temperatures were compared as ΔTm relative to reference conditions.
+> Differential scanning fluorimetry (protein thermal shift) data were analyzed using first-derivative and/or Boltzmann two-state Tm estimation consistent with Protein Thermal Shift workflows (Thermo Fisher Scientific) and established DSF protocols (Niesen et al., Nature Protocols 2007; Pantoliano et al., Journal of Biomolecular Screening 2001). Melting temperatures were compared as ΔTm relative to reference conditions.
 
-## Cite this pipeline
+## Cite this repository
 
 > Analysis used the open DSF pipeline (https://github.com/gigi777mo/dsf-pipeline), which implements platform-agnostic melt-curve import and literature-standard derivative and Boltzmann Tm calculations.
