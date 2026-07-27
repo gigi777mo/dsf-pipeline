@@ -1,0 +1,36 @@
+# Universal DSF / thermal shift analysis
+
+melt_file: "data/example_melt_wide.csv"
+samples_file: "data/samples.csv"   # optional
+output_dir: "results"
+
+# Tm methods: derivative | boltzmann | both
+method: both
+
+# Temperature window (°C); null = use full range
+t_min: null
+t_max: null
+
+smoothing:
+  enabled: true
+  window_length: 11   # odd integer; Savitzky–Golay
+  polyorder: 3
+
+derivative:
+  multi_peak: false   # if true, report multiple derivative peaks
+  min_prominence: 0.05  # relative to max |dF/dT|
+
+boltzmann:
+  # ROA relative to derivative peak (°C), used when auto
+  roa_half_width: 12.0
+  # or fixed ROA:
+  # roa_t_min: 40
+  # roa_t_max: 80
+
+qc:
+  min_amplitude: null   # absolute RFU span; null = auto relative threshold
+  min_rel_amplitude: 0.05
+
+reference:
+  # wells listed as is_reference in samples sheet, or:
+  wells: []

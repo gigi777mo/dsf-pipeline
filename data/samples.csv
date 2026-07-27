@@ -1,0 +1,5 @@
+well,sample,condition,replicate,is_reference
+A1,DemoProtein,buffer,1,true
+A2,DemoProtein,buffer,2,true
+B1,DemoProtein,ligand,1,false
+B2,DemoProtein,ligand,2,false
