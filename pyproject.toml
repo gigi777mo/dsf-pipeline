@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dsf-pipeline"
+version = "1.0.0"
+description = "Universal DSF / Protein Thermal Shift analysis (any qPCR melt-curve CSV)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "gigi777mo" }]
+dependencies = [
+  "numpy>=1.24",
+  "pandas>=2.0",
+  "scipy>=1.10",
+  "matplotlib>=3.7",
+  "seaborn>=0.12",
+  "pyyaml>=6.0",
+]
+
+[project.scripts]
+dsf-run = "dsf_pipeline.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"*" = ["*.yaml", "*.md"]
